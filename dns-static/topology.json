@@ -1,0 +1,11 @@
+{
+  "name": "dns-static",
+  "description": "Two routers back to back. R1 holds static ip host records (server1 on a loopback); R2 is the DNS client that resolves names through R1.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "GigabitEthernet0/0": "192.168.10.1/24", "Loopback0": "10.0.0.1/32" } },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "GigabitEthernet0/0": "192.168.10.2/24" } }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0" }
+  ]
+}

@@ -1,0 +1,28 @@
+! ===========================================================================
+! R1 DNS host configuration  (router, c7200/IOSv)
+! ComputingForGeeks CCNA 200-301 lab: dns-static
+! https://computingforgeeks.com/ccna-labs-dns-server-configuration-on-gns3-and-packet-tracer/
+!
+! R1 holds the static name-to-IP records. server1 resolves to a loopback so the
+! mapping is testable end to end.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+ exit
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.255
+ exit
+ip host server1.lab.example.com 10.0.0.1
+ip host gw.lab.example.com 192.168.10.1
+!
+! Full router-as-resolver (answering DNS queries from clients) needs:
+!   ip dns server
+! That command exists only on ISR / IOSv / IOS-XE. On a c7200 (dynamips) it
+! returns "% Invalid input detected at '^' marker." See the article for detail.
+!
+end
+write memory

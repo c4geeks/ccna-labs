@@ -1,0 +1,32 @@
+! ===========================================================================
+! R1 base configuration  (router, c7200/IOSv)
+! ComputingForGeeks CCNA 200-301 lab: base-device
+! https://computingforgeeks.com/cisco-device-base-configuration/
+!
+! Paste at the privileged-EXEC prompt. RSA key generation takes a few seconds;
+! on real gear, let it finish before the rest is applied.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+enable secret Cisc0-Lab!
+service password-encryption
+ip domain-name lab.example.com
+username admin privilege 15 secret Adm1n-Lab!
+crypto key generate rsa modulus 2048
+ip ssh version 2
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+ exit
+line console 0
+ password Con-Lab!
+ login
+ exit
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+banner motd #Authorized access only. Activity is logged.#
+end
+write memory

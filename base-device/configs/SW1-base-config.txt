@@ -1,0 +1,31 @@
+! ===========================================================================
+! SW1 base configuration  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: base-device
+! https://computingforgeeks.com/cisco-device-base-configuration/
+!
+! Paste at the privileged-EXEC prompt. RSA key generation takes a few seconds.
+! The management IP lives on the Vlan1 SVI (a switch has no routed Gi0/0 by default).
+! ===========================================================================
+enable
+configure terminal
+hostname SW1
+enable secret Cisc0-Lab!
+service password-encryption
+ip domain-name lab.example.com
+username admin privilege 15 secret Adm1n-Lab!
+crypto key generate rsa modulus 2048
+ip ssh version 2
+interface GigabitEthernet0/0
+ no shutdown
+ exit
+interface Vlan1
+ ip address 192.168.10.2 255.255.255.0
+ no shutdown
+ exit
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+banner motd #Authorized access only. Activity is logged.#
+end
+write memory

@@ -1,0 +1,14 @@
+{
+  "name": "hsrp",
+  "description": "Two routers share a virtual gateway (HSRP group 1, v2, VIP 192.168.10.254) across a Layer 2 switch. R1 priority 110 + preempt is active; R2 priority 100 is standby.",
+  "nodes": [
+    { "name": "R1",  "type": "router", "template": "c7200",  "interface": "GigabitEthernet0/0", "ip": "192.168.10.1/24", "hsrp": { "group": 1, "priority": 110, "preempt": true } },
+    { "name": "R2",  "type": "router", "template": "c7200",  "interface": "GigabitEthernet0/0", "ip": "192.168.10.2/24", "hsrp": { "group": 1, "priority": 100, "preempt": true } },
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "config": "none (default L2 switch)" }
+  ],
+  "hsrp_virtual_ip": "192.168.10.254",
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/1" },
+    { "a": "R2", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/2" }
+  ]
+}

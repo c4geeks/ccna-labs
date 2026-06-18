@@ -1,0 +1,21 @@
+! ===========================================================================
+! R2 HSRP configuration  (router, c7200/IOSv)  -- STANDBY (lower priority)
+! ComputingForGeeks CCNA 200-301 lab: hsrp
+! https://computingforgeeks.com/ccna-labs-hsrp-configuration-on-gns3-and-packet-tracer/
+!
+! Group 1, HSRP version 2, same virtual IP 192.168.10.254.
+! R2 has priority 100 (default) + preempt, so it takes over only when R1 fails.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+interface GigabitEthernet0/0
+ ip address 192.168.10.2 255.255.255.0
+ standby version 2
+ standby 1 ip 192.168.10.254
+ standby 1 priority 100
+ standby 1 preempt
+ no shutdown
+ exit
+end
+write memory

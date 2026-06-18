@@ -1,0 +1,22 @@
+! ===========================================================================
+! R1 HSRP configuration  (router, c7200/IOSv)  -- ACTIVE (higher priority)
+! ComputingForGeeks CCNA 200-301 lab: hsrp
+! https://computingforgeeks.com/ccna-labs-hsrp-configuration-on-gns3-and-packet-tracer/
+!
+! Group 1, HSRP version 2, virtual IP 192.168.10.254.
+! R1 has priority 110 + preempt, so it owns the active role and reclaims it
+! after a recovery.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ standby version 2
+ standby 1 ip 192.168.10.254
+ standby 1 priority 110
+ standby 1 preempt
+ no shutdown
+ exit
+end
+write memory

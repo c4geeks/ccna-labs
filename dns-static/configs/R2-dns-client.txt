@@ -1,0 +1,20 @@
+! ===========================================================================
+! R2 DNS client configuration  (router, c7200/IOSv)
+! ComputingForGeeks CCNA 200-301 lab: dns-static
+! https://computingforgeeks.com/ccna-labs-dns-server-configuration-on-gns3-and-packet-tracer/
+!
+! R2 resolves names through R1 and has a route to the server1 loopback so the
+! resolved address is reachable.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+interface GigabitEthernet0/0
+ ip address 192.168.10.2 255.255.255.0
+ no shutdown
+ exit
+ip name-server 192.168.10.1
+ip domain-lookup
+ip route 10.0.0.1 255.255.255.255 192.168.10.1
+end
+write memory

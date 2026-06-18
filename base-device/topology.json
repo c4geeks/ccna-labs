@@ -1,0 +1,11 @@
+{
+  "name": "base-device",
+  "description": "One router and one Layer 2 switch on a single management subnet, with SSH-only remote access. Base for the device-hardening and SSH labs.",
+  "nodes": [
+    { "name": "R1",  "type": "router", "template": "c7200", "mgmt_ip": "192.168.10.1/24", "interface": "GigabitEthernet0/0" },
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "mgmt_ip": "192.168.10.2/24", "interface": "Vlan1" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/0" }
+  ]
+}
