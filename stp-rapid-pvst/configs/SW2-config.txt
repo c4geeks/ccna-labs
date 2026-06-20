@@ -1,0 +1,16 @@
+! ===========================================================================
+! SW2 Rapid PVST+ secondary  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: stp-rapid-pvst
+! https://computingforgeeks.com/cisco-spanning-tree-protocol-configuration/
+!
+! Paste at the privileged-EXEC prompt. SW2 has priority 8192, second-lowest, so
+! it becomes the backup root and is designated on the SW2-SW3 segment.
+! Triangle links: Gi0/0 -> SW1, Gi0/1 -> SW3.
+! ===========================================================================
+enable
+configure terminal
+hostname SW2
+spanning-tree mode rapid-pvst
+spanning-tree vlan 1 priority 8192
+end
+write memory

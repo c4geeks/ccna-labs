@@ -1,0 +1,21 @@
+! ===========================================================================
+! SW1 Rapid PVST+ root bridge  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: stp-rapid-pvst
+! https://computingforgeeks.com/cisco-spanning-tree-protocol-configuration/
+!
+! Paste at the privileged-EXEC prompt. SW1 is forced to be the root with the
+! lowest priority (4096). Gi0/3 is a host-facing access port with PortFast and
+! BPDU Guard. Triangle links: Gi0/0 -> SW2, Gi0/1 -> SW3.
+! ===========================================================================
+enable
+configure terminal
+hostname SW1
+spanning-tree mode rapid-pvst
+spanning-tree vlan 1 priority 4096
+interface GigabitEthernet0/3
+ switchport mode access
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ exit
+end
+write memory

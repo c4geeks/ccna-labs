@@ -1,0 +1,15 @@
+! ===========================================================================
+! SW3 Rapid PVST+ (default priority)  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: stp-rapid-pvst
+! https://computingforgeeks.com/cisco-spanning-tree-protocol-configuration/
+!
+! Paste at the privileged-EXEC prompt. SW3 keeps the default priority (32768),
+! so it loses the SW2-SW3 segment and STP blocks SW3's Gi0/1. Its root port is
+! Gi0/0 toward SW1. Triangle links: Gi0/0 -> SW1, Gi0/1 -> SW2.
+! ===========================================================================
+enable
+configure terminal
+hostname SW3
+spanning-tree mode rapid-pvst
+end
+write memory

@@ -1,0 +1,14 @@
+{
+  "name": "stp-rapid-pvst",
+  "description": "Three Layer 2 switches in a triangle (one physical loop). Rapid PVST+ elects SW1 as root and blocks SW3's port toward SW2 to break the loop. Base for the Spanning Tree Protocol article.",
+  "nodes": [
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "role": "root", "priority": 4096 },
+    { "name": "SW2", "type": "switch", "template": "IOSvL2", "role": "secondary", "priority": 8192 },
+    { "name": "SW3", "type": "switch", "template": "IOSvL2", "role": "default", "priority": 32768 }
+  ],
+  "links": [
+    { "a": "SW1", "a_port": "Gi0/0", "b": "SW2", "b_port": "Gi0/0", "state": "forwarding" },
+    { "a": "SW1", "a_port": "Gi0/1", "b": "SW3", "b_port": "Gi0/0", "state": "forwarding (SW3 root port)" },
+    { "a": "SW2", "a_port": "Gi0/1", "b": "SW3", "b_port": "Gi0/1", "state": "blocked on SW3" }
+  ]
+}
