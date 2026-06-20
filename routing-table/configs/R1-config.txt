@@ -1,0 +1,33 @@
+! ===========================================================================
+! R1 routing-table lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: routing-table
+! https://computingforgeeks.com/cisco-ip-routing-table-explained/
+!
+! Paste at the privileged-EXEC prompt. R1 runs OSPF to R2 and also has a static
+! route and a default route, so "show ip route" on R1 shows every CCNA code
+! (C, L, O, S, S*). Run the matching R2 file on the other router.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+ exit
+interface Loopback1
+ ip address 172.16.1.1 255.255.255.0
+ ip ospf network point-to-point
+ exit
+interface GigabitEthernet0/0
+ ip address 10.0.12.1 255.255.255.252
+ no shutdown
+ exit
+router ospf 1
+ router-id 1.1.1.1
+ network 10.0.12.0 0.0.0.3 area 0
+ network 1.1.1.1 0.0.0.0 area 0
+ network 172.16.1.0 0.0.0.255 area 0
+ exit
+ip route 203.0.113.0 255.255.255.0 10.0.12.2
+ip route 0.0.0.0 0.0.0.0 10.0.12.2
+end
+write memory

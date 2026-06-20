@@ -1,0 +1,11 @@
+{
+  "name": "routing-table",
+  "description": "Two routers over an OSPF area 0 link. R1 also has a static and a default route, so show ip route on R1 shows every CCNA route code (C, L, O, S, S*). Base for the IP routing table article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.1/30", "Lo0": "1.1.1.1/32", "Lo1": "172.16.1.1/24" }, "extra": "static 203.0.113.0/24 + default via 10.0.12.2" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.2/30", "Lo0": "2.2.2.2/32", "Lo1": "192.168.20.1/24" } }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.0.12.0/30", "ospf": "area 0" }
+  ]
+}
