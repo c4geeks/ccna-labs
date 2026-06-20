@@ -37,6 +37,18 @@ Cisco Packet Tracer, or on real gear:
 There is no `.pkt` file: Packet Tracer's format cannot be generated outside the
 app. Build the two switches, connect Gi0/0 to Gi0/0, then paste the configs.
 
+### Hardened 802.1Q trunk variant
+
+For the [802.1Q trunking guide](https://computingforgeeks.com/cisco-trunking-802-1q-configuration/),
+load the hardened trunk configs instead. They add a dedicated native VLAN (99),
+prune the allowed VLAN list to `10,20,99`, and disable DTP with `nonegotiate`:
+
+- `configs/SW1-trunk-hardened.txt` -> SW1
+- `configs/SW2-trunk-hardened.txt` -> SW2
+
+Both ends must agree on encapsulation, native VLAN, and the allowed list, so run
+the matching file on each switch.
+
 ## Verify
 
 ```

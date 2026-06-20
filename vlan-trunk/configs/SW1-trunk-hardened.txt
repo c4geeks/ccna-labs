@@ -1,0 +1,32 @@
+! ===========================================================================
+! SW1 hardened 802.1Q trunk  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: vlan-trunk
+! https://computingforgeeks.com/cisco-trunking-802-1q-configuration/
+!
+! Paste at the privileged-EXEC prompt.
+! Dedicated native VLAN 99, allowed list pruned to 10,20,99, DTP disabled.
+! Run the matching SW2 file on the other switch; both ends must agree.
+! ===========================================================================
+enable
+configure terminal
+hostname SW1
+vlan 10
+ name SALES
+vlan 20
+ name ENGINEERING
+vlan 99
+ name NATIVE
+ exit
+interface GigabitEthernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport nonegotiate
+ exit
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+ exit
+end
+write memory
