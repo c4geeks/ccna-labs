@@ -1,0 +1,15 @@
+{
+  "name": "vlan-trunk",
+  "description": "Two Layer 2 switches sharing VLAN 10 (Sales) and VLAN 20 (Engineering) over an 802.1Q trunk, each with one access port. Base for the VLANs and 802.1Q trunking articles.",
+  "nodes": [
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "access_port": "Gi0/1 -> VLAN 10", "trunk": "Gi0/0" },
+    { "name": "SW2", "type": "switch", "template": "IOSvL2", "access_port": "Gi0/2 -> VLAN 20", "trunk": "Gi0/0" }
+  ],
+  "vlans": [
+    { "id": 10, "name": "SALES" },
+    { "id": 20, "name": "ENGINEERING" }
+  ],
+  "links": [
+    { "a": "SW1", "a_port": "Gi0/0", "b": "SW2", "b_port": "Gi0/0", "kind": "802.1Q trunk" }
+  ]
+}
