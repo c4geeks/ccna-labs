@@ -1,0 +1,12 @@
+{
+  "name": "etherchannel-lacp",
+  "description": "Two Layer 2 switches with two links bundled into one Port-channel using LACP. Spanning Tree sees a single logical link, so both members forward. Base for the EtherChannel article.",
+  "nodes": [
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "channel_group": 1, "mode": "LACP active" },
+    { "name": "SW2", "type": "switch", "template": "IOSvL2", "channel_group": 1, "mode": "LACP active" }
+  ],
+  "links": [
+    { "a": "SW1", "a_port": "Gi0/0", "b": "SW2", "b_port": "Gi0/0", "bundle": "Port-channel 1" },
+    { "a": "SW1", "a_port": "Gi0/1", "b": "SW2", "b_port": "Gi0/1", "bundle": "Port-channel 1" }
+  ]
+}

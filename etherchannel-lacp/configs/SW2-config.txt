@@ -1,0 +1,17 @@
+! ===========================================================================
+! SW2 LACP EtherChannel  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: etherchannel-lacp
+! https://computingforgeeks.com/cisco-etherchannel-configuration/
+!
+! Paste at the privileged-EXEC prompt. Two links (Gi0/0, Gi0/1) bundle into
+! Port-channel 1 with LACP active. Run the matching SW1 file on the other switch;
+! both ends must be active (or one active, one passive).
+! ===========================================================================
+enable
+configure terminal
+hostname SW2
+interface range GigabitEthernet0/0 - 1
+ channel-group 1 mode active
+ exit
+end
+write memory
