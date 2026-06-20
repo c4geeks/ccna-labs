@@ -1,0 +1,11 @@
+{
+  "name": "cdp-lldp",
+  "description": "Two Layer 2 switches discovering each other with CDP (on by default) and LLDP (enabled with lldp run). Base for the CDP and LLDP network discovery article.",
+  "nodes": [
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "mgmt_ip": "10.10.10.1", "link": "Gi0/0" },
+    { "name": "SW2", "type": "switch", "template": "IOSvL2", "mgmt_ip": "10.10.10.2", "link": "Gi0/0" }
+  ],
+  "links": [
+    { "a": "SW1", "a_port": "Gi0/0", "b": "SW2", "b_port": "Gi0/0", "kind": "CDP + LLDP" }
+  ]
+}

@@ -1,0 +1,23 @@
+! ===========================================================================
+! SW2 CDP + LLDP discovery  (Layer 2 switch, IOSvL2)
+! ComputingForGeeks CCNA 200-301 lab: cdp-lldp
+! https://computingforgeeks.com/cisco-cdp-lldp-network-discovery/
+!
+! Paste at the privileged-EXEC prompt. CDP is on by default; lldp run turns on
+! LLDP. The Vlan1 SVI gives the switch an IP so neighbors show it in the detail
+! output. Run the matching SW1 file on the other switch.
+! ===========================================================================
+enable
+configure terminal
+hostname SW2
+lldp run
+interface Vlan1
+ ip address 10.10.10.2 255.255.255.0
+ no shutdown
+ exit
+interface GigabitEthernet0/0
+ switchport mode access
+ switchport access vlan 1
+ exit
+end
+write memory
