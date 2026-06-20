@@ -1,0 +1,11 @@
+{
+  "name": "packet-forwarding",
+  "description": "Two routers over an OSPF area 0 link, plus a static route on R1, built so you can see how a Cisco router actually forwards a packet: the CEF FIB (show ip cef), the adjacency table / Layer 2 rewrite (show adjacency detail), ARP, and recursion. Base for the packet-forwarding article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.1/30", "Lo0": "1.1.1.1/32", "Lo1": "172.16.1.1/24" }, "extra": "static 198.51.100.0/24 via 10.0.12.2 (recursion demo)" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.2/30", "Lo0": "2.2.2.2/32", "Lo1": "192.168.20.1/24" } }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.0.12.0/30", "ospf": "area 0" }
+  ]
+}

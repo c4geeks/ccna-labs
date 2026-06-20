@@ -1,0 +1,31 @@
+! ===========================================================================
+! R2 packet-forwarding lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: packet-forwarding
+! https://computingforgeeks.com/cisco-router-packet-forwarding-explained/
+!
+! Paste at the privileged-EXEC prompt. R2 advertises its loopbacks into OSPF so
+! R1 learns 2.2.2.2 and 192.168.20.0/24 as O routes and builds FIB entries for
+! them. Run the matching R1 file on the other router.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+interface Loopback0
+ ip address 2.2.2.2 255.255.255.255
+ exit
+interface Loopback1
+ ip address 192.168.20.1 255.255.255.0
+ ip ospf network point-to-point
+ exit
+interface GigabitEthernet0/0
+ ip address 10.0.12.2 255.255.255.252
+ no shutdown
+ exit
+router ospf 1
+ router-id 2.2.2.2
+ network 10.0.12.0 0.0.0.3 area 0
+ network 2.2.2.2 0.0.0.0 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ exit
+end
+write memory
