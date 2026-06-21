@@ -1,0 +1,23 @@
+! R1 - router-on-a-stick. One physical interface, one subinterface per VLAN.
+! The physical interface carries NO IP; the subinterfaces own the gateways.
+hostname R1
+!
+interface GigabitEthernet0/0
+ no ip address
+ no shutdown
+!
+interface GigabitEthernet0/0.10
+ description VLAN 10 gateway
+ encapsulation dot1Q 10
+ ip address 10.10.10.1 255.255.255.0
+!
+interface GigabitEthernet0/0.20
+ description VLAN 20 gateway
+ encapsulation dot1Q 20
+ ip address 10.20.20.1 255.255.255.0
+!
+! If a routed VLAN is the trunk's native (untagged) VLAN, that subinterface
+! needs the native keyword, e.g.:
+!   encapsulation dot1Q 99 native
+!
+end

@@ -1,0 +1,15 @@
+{
+  "name": "router-on-a-stick",
+  "description": "Router-on-a-stick inter-VLAN routing: one router routes between VLAN 10 and VLAN 20 over a single 802.1Q trunk to a switch, using one subinterface per VLAN. Two host routers (one per VLAN) prove cross-VLAN connectivity. Companion lab for the router-on-a-stick inter-VLAN routing article.",
+  "nodes": [
+    { "name": "R1", "template": "c7200", "role": "router-on-a-stick", "interfaces": { "Gi0/0": "trunk (no IP)", "Gi0/0.10": "10.10.10.1/24 (VLAN 10 gw)", "Gi0/0.20": "10.20.20.1/24 (VLAN 20 gw)" } },
+    { "name": "SW1", "template": "IOSvL2", "role": "L2 switch", "ports": { "Gi0/0": "802.1Q trunk to R1 (vlans 10,20)", "Gi0/1": "access VLAN 10 (Host10)", "Gi0/2": "access VLAN 20 (Host20)" } },
+    { "name": "Host10", "template": "c7200", "role": "host in VLAN 10", "interfaces": { "Gi0/0": "10.10.10.10/24, gw 10.10.10.1" } },
+    { "name": "Host20", "template": "c7200", "role": "host in VLAN 20", "interfaces": { "Gi0/0": "10.20.20.20/24, gw 10.20.20.1" } }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/0", "type": "802.1Q trunk" },
+    { "a": "Host10", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/1", "type": "access vlan 10" },
+    { "a": "Host20", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/2", "type": "access vlan 20" }
+  ]
+}
