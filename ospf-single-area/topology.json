@@ -1,0 +1,13 @@
+{
+  "name": "ospf-single-area",
+  "description": "Three Cisco routers in a line, all in OSPF area 0, configured to demonstrate single-area OSPFv2: the network-statement method (R1, R3) and the interface method (R2), passive LAN interfaces, an OSPF-advertised default route from the edge (R1), and verification of adjacencies, routes, and cost. Companion lab for the single-area OSPF configuration article.",
+  "nodes": [
+    { "name": "R1", "template": "c7200", "method": "network statements + default-information originate", "interfaces": { "Gi0/0": "10.0.12.1/30", "Lo1": "10.1.1.1/24 (LAN, passive)" }, "ospf": "area 0, router-id 1.1.1.1, ASBR (default route)" },
+    { "name": "R2", "template": "c7200", "method": "interface (ip ospf 1 area 0)", "interfaces": { "Gi0/0": "10.0.12.2/30", "Gi1/0": "10.0.23.2/30", "Lo1": "10.2.2.2/24 (LAN, passive)" }, "ospf": "area 0, router-id 2.2.2.2" },
+    { "name": "R3", "template": "c7200", "method": "network statements", "interfaces": { "Gi0/0": "10.0.23.1/30", "Lo1": "10.3.3.3/24 (LAN, passive)" }, "ospf": "area 0, router-id 3.3.3.3" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.0.12.0/30" },
+    { "a": "R2", "a_port": "Gi1/0", "b": "R3", "b_port": "Gi0/0", "subnet": "10.0.23.0/30" }
+  ]
+}

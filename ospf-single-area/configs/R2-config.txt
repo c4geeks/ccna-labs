@@ -1,0 +1,28 @@
+! R2 - transit router (interface method: ip ospf 1 area 0 per interface)
+! RID 2.2.2.2, OSPF area 0
+hostname R2
+!
+interface Loopback1
+ description LAN (passive in OSPF)
+ ip address 10.2.2.2 255.255.255.0
+ ip ospf network point-to-point
+ ip ospf 1 area 0
+!
+interface GigabitEthernet0/0
+ description Link to R1
+ ip address 10.0.12.2 255.255.255.252
+ ip ospf 1 area 0
+ no shutdown
+!
+interface GigabitEthernet1/0
+ description Link to R3
+ ip address 10.0.23.2 255.255.255.252
+ ip ospf 1 area 0
+ no shutdown
+!
+! The interface method auto-creates process 1; we only enter it to set the RID.
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface Loopback1
+!
+end

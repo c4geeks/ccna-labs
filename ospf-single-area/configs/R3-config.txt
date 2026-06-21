@@ -1,0 +1,21 @@
+! R3 - branch router (network-statement method)
+! RID 3.3.3.3, OSPF area 0
+hostname R3
+!
+interface Loopback1
+ description LAN (passive in OSPF)
+ ip address 10.3.3.3 255.255.255.0
+ ip ospf network point-to-point
+!
+interface GigabitEthernet0/0
+ description Link to R2
+ ip address 10.0.23.1 255.255.255.252
+ no shutdown
+!
+router ospf 1
+ router-id 3.3.3.3
+ passive-interface Loopback1
+ network 10.0.23.0 0.0.0.3 area 0
+ network 10.3.3.0 0.0.0.255 area 0
+!
+end

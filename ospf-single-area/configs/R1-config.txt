@@ -1,0 +1,26 @@
+! R1 - edge router (network-statement method, originates the default route)
+! RID 1.1.1.1, OSPF area 0
+hostname R1
+!
+interface Loopback1
+ description LAN (passive in OSPF)
+ ip address 10.1.1.1 255.255.255.0
+ ip ospf network point-to-point
+!
+interface GigabitEthernet0/0
+ description Link to R2
+ ip address 10.0.12.1 255.255.255.252
+ no shutdown
+!
+! A default route must exist before OSPF can originate it. Null0 is a lab
+! placeholder; on real gear this points at your ISP next hop.
+ip route 0.0.0.0 0.0.0.0 Null0
+!
+router ospf 1
+ router-id 1.1.1.1
+ passive-interface Loopback1
+ network 10.0.12.0 0.0.0.3 area 0
+ network 10.1.1.0 0.0.0.255 area 0
+ default-information originate
+!
+end
