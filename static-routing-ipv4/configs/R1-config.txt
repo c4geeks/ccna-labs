@@ -1,0 +1,33 @@
+! ===========================================================================
+! R1 static-routing-ipv4 lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: static-routing-ipv4
+! https://computingforgeeks.com/cisco-ipv4-static-routes-configuration/
+!
+! Two links to R2: primary 10.0.12.0/30 (Gi0/0), backup 10.0.13.0/30 (Gi1/0).
+! R1 reaches R2's LAN 192.168.2.0/24 via a primary static (AD 1) and a floating
+! static (AD 200) over the backup, plus a default route. Run the matching R2
+! file on the other router.
+!
+! Failover demo: shut Gi0/0 on BOTH routers, then re-run "show ip route
+! 192.168.2.0" and ping 192.168.2.1 to watch the floating route ([200/0]) take
+! over the backup link.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface Loopback1
+ ip address 192.168.1.1 255.255.255.0
+ exit
+interface GigabitEthernet0/0
+ ip address 10.0.12.1 255.255.255.252
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ip address 10.0.13.1 255.255.255.252
+ no shutdown
+ exit
+ip route 192.168.2.0 255.255.255.0 10.0.12.2
+ip route 192.168.2.0 255.255.255.0 10.0.13.2 200
+ip route 0.0.0.0 0.0.0.0 10.0.12.2
+end
+write memory

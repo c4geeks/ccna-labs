@@ -1,0 +1,12 @@
+{
+  "name": "static-routing-ipv4",
+  "description": "Two routers with two links (primary + backup), built to demonstrate every IPv4 static route type on Cisco IOS: next-hop, default, and a floating static route that fails over to the backup link when the primary is shut. Base for the static routing article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.1/30", "Gi1/0": "10.0.13.1/30", "Lo1": "192.168.1.1/24" }, "extra": "primary + floating(AD 200) static to 192.168.2.0/24, default route" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.12.2/30", "Gi1/0": "10.0.13.2/30", "Lo1": "192.168.2.1/24" }, "extra": "primary + floating(AD 200) static to 192.168.1.0/24" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.0.12.0/30", "role": "primary" },
+    { "a": "R1", "a_port": "Gi1/0", "b": "R2", "b_port": "Gi1/0", "subnet": "10.0.13.0/30", "role": "backup" }
+  ]
+}
