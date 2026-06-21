@@ -1,0 +1,36 @@
+! ===========================================================================
+! R1 ipv6-static-routing lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: ipv6-static-routing
+! https://computingforgeeks.com/cisco-ipv6-static-routes-configuration/
+!
+! Two links to R2: primary 2001:DB8:12::/64 (Gi0/0), backup 2001:DB8:13::/64
+! (Gi1/0). R1 reaches R2's network 2001:DB8:2::/64 via a fully-specified
+! link-local primary static (AD 1) and a floating static (AD 200) over the
+! backup, plus a ::/0 default route. Run the matching R2 file on the other router.
+!
+! Failover demo: shut Gi0/0 on BOTH routers, then re-run
+! "show ipv6 route 2001:DB8:2::/64" and ping 2001:DB8:2::1 to watch the floating
+! route ([200]) take over the backup link.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+ipv6 unicast-routing
+interface Loopback1
+ ipv6 address 2001:DB8:1::1/64
+ exit
+interface GigabitEthernet0/0
+ ipv6 address 2001:DB8:12::1/64
+ ipv6 address FE80::1 link-local
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ipv6 address 2001:DB8:13::1/64
+ ipv6 address FE80::10 link-local
+ no shutdown
+ exit
+ipv6 route 2001:DB8:2::/64 GigabitEthernet0/0 FE80::2
+ipv6 route 2001:DB8:2::/64 GigabitEthernet1/0 FE80::20 200
+ipv6 route ::/0 2001:DB8:12::2
+end
+write memory

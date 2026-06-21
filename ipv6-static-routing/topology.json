@@ -1,0 +1,12 @@
+{
+  "name": "ipv6-static-routing",
+  "description": "Two routers with two links (primary + backup), built to demonstrate IPv6 static routing on Cisco IOS: ipv6 unicast-routing, a fully-specified link-local next-hop static, the ::/0 default, and a floating static that fails over to the backup link. Base for the IPv6 static routing article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "2001:DB8:12::1/64 (FE80::1)", "Gi1/0": "2001:DB8:13::1/64 (FE80::10)", "Lo1": "2001:DB8:1::1/64" }, "extra": "primary + floating(AD 200) static to 2001:DB8:2::/64, ::/0 default" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "2001:DB8:12::2/64 (FE80::2)", "Gi1/0": "2001:DB8:13::2/64 (FE80::20)", "Lo1": "2001:DB8:2::1/64" }, "extra": "primary + floating(AD 200) static to 2001:DB8:1::/64" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "2001:DB8:12::/64", "role": "primary" },
+    { "a": "R1", "a_port": "Gi1/0", "b": "R2", "b_port": "Gi1/0", "subnet": "2001:DB8:13::/64", "role": "backup" }
+  ]
+}

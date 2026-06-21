@@ -1,0 +1,31 @@
+! ===========================================================================
+! R2 ipv6-static-routing lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: ipv6-static-routing
+! https://computingforgeeks.com/cisco-ipv6-static-routes-configuration/
+!
+! Two links to R1: primary 2001:DB8:12::/64 (Gi0/0), backup 2001:DB8:13::/64
+! (Gi1/0). R2 reaches R1's network 2001:DB8:1::/64 via a fully-specified
+! link-local primary static (AD 1) and a floating static (AD 200), so the return
+! path also fails over when the primary link is shut. Run the matching R1 file.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+ipv6 unicast-routing
+interface Loopback1
+ ipv6 address 2001:DB8:2::1/64
+ exit
+interface GigabitEthernet0/0
+ ipv6 address 2001:DB8:12::2/64
+ ipv6 address FE80::2 link-local
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ipv6 address 2001:DB8:13::2/64
+ ipv6 address FE80::20 link-local
+ no shutdown
+ exit
+ipv6 route 2001:DB8:1::/64 GigabitEthernet0/0 FE80::1
+ipv6 route 2001:DB8:1::/64 GigabitEthernet1/0 FE80::10 200
+end
+write memory
