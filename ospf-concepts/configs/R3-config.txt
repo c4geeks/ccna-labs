@@ -1,0 +1,28 @@
+! ===========================================================================
+! R3 ospf-concepts lab  (router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: ospf-concepts
+! https://computingforgeeks.com/ospf-concepts-explained/
+!
+! Three routers (R1, R2, R3) on one broadcast segment (10.0.0.0/24) via a switch,
+! all in OSPF area 0. Router IDs are 1.1.1.1 / 2.2.2.2 / 3.3.3.3, so the highest
+! (R3) becomes DR, R2 the BDR, and R1 a DROTHER. Paste at the privileged-EXEC
+! prompt. Run R1, R2 and R3 on their three routers; SW1 is a plain L2 switch
+! (default VLAN 1 on every port, no config needed).
+! ===========================================================================
+enable
+configure terminal
+hostname R3
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+ exit
+interface GigabitEthernet0/0
+ ip address 10.0.0.3 255.255.255.0
+ no shutdown
+ exit
+router ospf 1
+ router-id 3.3.3.3
+ network 10.0.0.0 0.0.0.255 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+ exit
+end
+write memory

@@ -1,0 +1,15 @@
+{
+  "name": "ospf-concepts",
+  "description": "Three routers on one broadcast segment (via a switch), all in OSPF area 0, built to demonstrate OSPF concepts: neighbor adjacencies, DR/BDR election, the link-state database (router and network LSAs), and cost. Router IDs 1.1.1.1/2.2.2.2/3.3.3.3 make R3 the DR, R2 the BDR, R1 a DROTHER. Base for the OSPF concepts article.",
+  "nodes": [
+    { "name": "SW1", "type": "switch", "template": "IOSvL2", "note": "plain L2 switch, default VLAN 1 on all ports" },
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.0.1/24", "Lo0": "1.1.1.1/32" }, "ospf": "area 0, router-id 1.1.1.1 (DROTHER)" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.0.2/24", "Lo0": "2.2.2.2/32" }, "ospf": "area 0, router-id 2.2.2.2 (BDR)" },
+    { "name": "R3", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.0.3/24", "Lo0": "3.3.3.3/32" }, "ospf": "area 0, router-id 3.3.3.3 (DR)" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/0" },
+    { "a": "R2", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/1" },
+    { "a": "R3", "a_port": "Gi0/0", "b": "SW1", "b_port": "Gi0/2" }
+  ]
+}
