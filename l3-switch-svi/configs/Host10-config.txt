@@ -1,0 +1,11 @@
+! Host10 - end device in VLAN 10 (a router acting as a host in the lab).
+! On a real PC this is just IP 10.10.10.10/24, gateway 10.10.10.1 (the Vlan10 SVI).
+hostname Host10
+!
+interface GigabitEthernet0/0
+ ip address 10.10.10.10 255.255.255.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 10.10.10.1
+!
+end

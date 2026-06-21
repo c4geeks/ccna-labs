@@ -1,0 +1,30 @@
+! SW1 - Layer 3 switch doing inter-VLAN routing with SVIs.
+! ip routing is OFF by default on a multilayer switch; this is the key step.
+hostname SW1
+!
+ip routing
+!
+vlan 10
+ name SALES
+vlan 20
+ name ENGINEERING
+!
+! SVIs = the per-VLAN gateways (routed inside the switch)
+interface Vlan10
+ ip address 10.10.10.1 255.255.255.0
+ no shutdown
+!
+interface Vlan20
+ ip address 10.20.20.1 255.255.255.0
+ no shutdown
+!
+! Host access ports
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 10
+!
+interface GigabitEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+!
+end
