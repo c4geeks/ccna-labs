@@ -1,0 +1,18 @@
+! ===========================================================================
+! ClientB dhcp-server-relay lab  (DHCP client, remote LAN, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: dhcp-server-relay
+! https://computingforgeeks.com/cisco-dhcp-server-relay-configuration/
+!
+! A router used as an end host on R2's LAN (192.168.20.0/24). It has no local
+! DHCP server; its request is relayed by R2 to the server at 10.0.0.1. The lease
+! record names server 10.0.0.1, the proof the request crossed the relay.
+! ===========================================================================
+enable
+configure terminal
+hostname ClientB
+interface GigabitEthernet0/0
+ ip address dhcp
+ no shutdown
+ exit
+end
+write memory

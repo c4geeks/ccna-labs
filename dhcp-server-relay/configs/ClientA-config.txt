@@ -1,0 +1,17 @@
+! ===========================================================================
+! ClientA dhcp-server-relay lab  (DHCP client, local LAN, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: dhcp-server-relay
+! https://computingforgeeks.com/cisco-dhcp-server-relay-configuration/
+!
+! A router used as an end host on R1's own LAN. It leases directly from the
+! local server (192.168.10.1). Verify with: show ip interface brief / show dhcp lease.
+! ===========================================================================
+enable
+configure terminal
+hostname ClientA
+interface GigabitEthernet0/0
+ ip address dhcp
+ no shutdown
+ exit
+end
+write memory

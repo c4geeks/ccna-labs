@@ -1,0 +1,39 @@
+! ===========================================================================
+! R1 dhcp-server-relay lab  (DHCP server, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: dhcp-server-relay
+! https://computingforgeeks.com/cisco-dhcp-server-relay-configuration/
+!
+! R1 is the central DHCP server. Pool LAN10 serves its own connected LAN
+! (192.168.10.0/24); pool LAN20 serves the remote 192.168.20.0/24 LAN behind R2
+! via the relay. R1 needs a route to the remote LAN so its replies can reach the
+! giaddr. Run R2 (relay) and the two Client files on the inside hosts.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ip address 10.0.0.1 255.255.255.252
+ no shutdown
+ exit
+ip route 192.168.20.0 255.255.255.0 10.0.0.2
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp pool LAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+ domain-name lab.example.com
+ lease 0 8
+ exit
+ip dhcp pool LAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+ lease 0 8
+ exit
+end
+write memory

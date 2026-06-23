@@ -1,0 +1,15 @@
+{
+  "name": "dhcp-server-relay",
+  "description": "A central Cisco IOS DHCP server (R1) leasing two LANs: one it is directly attached to, and one behind a second router (R2) acting as a DHCP relay agent with ip helper-address. Shows the DHCP server pool config, the relay, and how a relayed lease differs from a direct one. Base for the DHCP server and relay article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "192.168.10.1/24", "Gi1/0": "10.0.0.1/30" }, "extra": "DHCP server: pools LAN10 (192.168.10.0/24) + LAN20 (192.168.20.0/24); route to 192.168.20.0/24 via R2" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.0.0.2/30", "Gi1/0": "192.168.20.1/24 (ip helper-address 10.0.0.1)" }, "extra": "DHCP relay agent; route to 192.168.10.0/24 via R1" },
+    { "name": "ClientA", "type": "host", "template": "c7200", "interfaces": { "Gi0/0": "dhcp" }, "extra": "leases 192.168.10.11 directly from R1" },
+    { "name": "ClientB", "type": "host", "template": "c7200", "interfaces": { "Gi0/0": "dhcp" }, "extra": "leases 192.168.20.11 from R1 across the R2 relay" }
+  ],
+  "links": [
+    { "a": "ClientA", "a_port": "Gi0/0", "b": "R1", "b_port": "Gi0/0", "subnet": "192.168.10.0/24", "role": "client-lan" },
+    { "a": "R1", "a_port": "Gi1/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.0.0.0/30", "role": "transit" },
+    { "a": "R2", "a_port": "Gi1/0", "b": "ClientB", "b_port": "Gi0/0", "subnet": "192.168.20.0/24", "role": "client-lan" }
+  ]
+}

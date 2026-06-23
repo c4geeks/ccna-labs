@@ -1,0 +1,24 @@
+! ===========================================================================
+! R2 dhcp-server-relay lab  (DHCP relay agent, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: dhcp-server-relay
+! https://computingforgeeks.com/cisco-dhcp-server-relay-configuration/
+!
+! R2 has no DHCP pool. Its client-facing interface (Gi1/0) carries
+! ip helper-address 10.0.0.1, so it catches the DHCP broadcasts from the
+! 192.168.20.0/24 LAN and forwards them as a unicast to the server R1.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+interface GigabitEthernet0/0
+ ip address 10.0.0.2 255.255.255.252
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ip address 192.168.20.1 255.255.255.0
+ ip helper-address 10.0.0.1
+ no shutdown
+ exit
+ip route 192.168.10.0 255.255.255.0 10.0.0.1
+end
+write memory
