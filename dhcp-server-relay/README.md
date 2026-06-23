@@ -62,5 +62,5 @@ DHCP server on another subnet on its own. `ip helper-address <server>` on the
 client-facing interface turns those broadcasts into a unicast to the server, and
 the relay stamps in the gateway address (giaddr) so the server picks the right
 pool. The same command also forwards a default list of other broadcast UDP
-services (TFTP, DNS, TACACS, NTP, NetBIOS, BOOTP); tune it with
+services (Time, TACACS, DNS, BOOTP, TFTP, NetBIOS name and datagram); tune it with
 `ip forward-protocol`.
