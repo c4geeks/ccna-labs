@@ -1,0 +1,15 @@
+{
+  "name": "nat-pat",
+  "description": "One NAT router (R1) with two private LANs and an outside router (R2) standing in for the internet. R1 runs static NAT for an inside server and PAT overload for an inside host, demonstrating all three inside-source NAT forms (static, pool, and overload) on Cisco IOS. Base for the NAT and PAT article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "192.168.10.1/24 (ip nat inside)", "Gi2/0": "192.168.20.1/24 (ip nat inside)", "Gi1/0": "203.0.113.1/30 (ip nat outside)" }, "extra": "static NAT 192.168.20.20->203.0.113.10; PAT overload of 192.168.10.0/24 onto pool PUBLIC (203.0.113.9); default route to R2" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "203.0.113.2/30", "Lo0": "198.51.100.1/24" }, "extra": "internet stand-in; route 203.0.113.8/29 back to R1" },
+    { "name": "Host1", "type": "host", "template": "c7200", "interfaces": { "Gi0/0": "192.168.10.10/24" }, "extra": "PAT LAN; default route to R1" },
+    { "name": "Host2", "type": "host", "template": "c7200", "interfaces": { "Gi0/0": "192.168.20.20/24" }, "extra": "inside server with static NAT; default route to R1" }
+  ],
+  "links": [
+    { "a": "Host1", "a_port": "Gi0/0", "b": "R1", "b_port": "Gi0/0", "subnet": "192.168.10.0/24", "role": "inside" },
+    { "a": "Host2", "a_port": "Gi0/0", "b": "R1", "b_port": "Gi2/0", "subnet": "192.168.20.0/24", "role": "inside" },
+    { "a": "R1", "a_port": "Gi1/0", "b": "R2", "b_port": "Gi0/0", "subnet": "203.0.113.0/30", "role": "outside" }
+  ]
+}

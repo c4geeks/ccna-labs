@@ -1,0 +1,41 @@
+! ===========================================================================
+! R1 nat-pat lab  (NAT router, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: nat-pat
+! https://computingforgeeks.com/cisco-nat-pat-configuration/
+!
+! R1 is the NAT boundary: ip nat inside on the two private LANs (Gi0/0, Gi2/0),
+! ip nat outside on the public link to R2 (Gi1/0). It runs static NAT for the
+! inside server (192.168.20.20 -> 203.0.113.10) and PAT overload for the
+! 192.168.10.0/24 LAN onto the PUBLIC pool. Run R2 on the other router and the
+! two Host files on the inside hosts.
+!
+! Pool gotcha: the pool starts at 203.0.113.9, NOT .8. With prefix-length 29
+! IOS reserves the .8 network and .15 broadcast, so a pool starting at .8 never
+! allocates (misses climb and pings fail).
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+interface GigabitEthernet0/0
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+ no shutdown
+ exit
+interface GigabitEthernet2/0
+ ip address 192.168.20.1 255.255.255.0
+ ip nat inside
+ no shutdown
+ exit
+interface GigabitEthernet1/0
+ ip address 203.0.113.1 255.255.255.252
+ ip nat outside
+ no shutdown
+ exit
+ip route 0.0.0.0 0.0.0.0 203.0.113.2
+ip nat translation icmp-timeout 600
+ip nat inside source static 192.168.20.20 203.0.113.10
+access-list 1 permit 192.168.10.0 0.0.0.255
+ip nat pool PUBLIC 203.0.113.9 203.0.113.9 prefix-length 29
+ip nat inside source list 1 pool PUBLIC overload
+end
+write memory

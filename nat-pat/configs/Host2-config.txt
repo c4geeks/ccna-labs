@@ -1,0 +1,19 @@
+! ===========================================================================
+! Host2 nat-pat lab  (inside server on 192.168.20.0/24, fixed static NAT)
+! ComputingForGeeks CCNA 200-301 lab: nat-pat
+! https://computingforgeeks.com/cisco-nat-pat-configuration/
+!
+! A router used as an end host. It is the inside server with a permanent static
+! mapping to the public address 203.0.113.10, so the outside can reach it at a
+! fixed address.
+! ===========================================================================
+enable
+configure terminal
+hostname Host2
+interface GigabitEthernet0/0
+ ip address 192.168.20.20 255.255.255.0
+ no shutdown
+ exit
+ip route 0.0.0.0 0.0.0.0 192.168.20.1
+end
+write memory

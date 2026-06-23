@@ -1,0 +1,22 @@
+! ===========================================================================
+! R2 nat-pat lab  (outside / internet stand-in, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: nat-pat
+! https://computingforgeeks.com/cisco-nat-pat-configuration/
+!
+! R2 stands in for the public internet. It offers a public host at 198.51.100.1
+! (Loopback0) and routes the public NAT block 203.0.113.8/29 back to R1 so that
+! translated traffic returns correctly.
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+interface GigabitEthernet0/0
+ ip address 203.0.113.2 255.255.255.252
+ no shutdown
+ exit
+interface Loopback0
+ ip address 198.51.100.1 255.255.255.0
+ exit
+ip route 203.0.113.8 255.255.255.248 203.0.113.1
+end
+write memory

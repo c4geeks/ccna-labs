@@ -1,0 +1,18 @@
+! ===========================================================================
+! Host1 nat-pat lab  (inside host on 192.168.10.0/24, translated by PAT)
+! ComputingForGeeks CCNA 200-301 lab: nat-pat
+! https://computingforgeeks.com/cisco-nat-pat-configuration/
+!
+! A router used as an end host. It sits on the PAT LAN, so its traffic to the
+! outside is overloaded onto the PUBLIC pool address with a translated port.
+! ===========================================================================
+enable
+configure terminal
+hostname Host1
+interface GigabitEthernet0/0
+ ip address 192.168.10.10 255.255.255.0
+ no shutdown
+ exit
+ip route 0.0.0.0 0.0.0.0 192.168.10.1
+end
+write memory
