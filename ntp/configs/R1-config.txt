@@ -1,0 +1,29 @@
+! ===========================================================================
+! R1 ntp lab  (NTP master / time source, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: ntp
+! https://computingforgeeks.com/cisco-ntp-configuration/
+!
+! R1 is the authoritative time source. ntp master 3 serves time from R1's own
+! hardware clock at stratum 3 (reference 127.127.1.1 / .LOCL.). NTP MD5
+! authentication (key 1) is enabled so clients only sync to a server that
+! proves the shared key. Run R2-config.txt on the client.
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+clock timezone UTC 0 0
+!
+interface GigabitEthernet0/0
+ ip address 10.10.10.1 255.255.255.0
+ no shutdown
+ exit
+!
+! NTP authentication: shared MD5 key 1
+ntp authentication-key 1 md5 Cisc0NtpKey
+ntp authenticate
+ntp trusted-key 1
+!
+! Serve time from this router's own clock at stratum 3
+ntp master 3
+end
+write memory

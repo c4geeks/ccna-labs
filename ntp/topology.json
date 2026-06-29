@@ -1,0 +1,11 @@
+{
+  "name": "ntp",
+  "description": "Two Cisco IOS routers on one subnet demonstrating NTP. R1 is the authoritative time source (ntp master 3) with NTP MD5 authentication; R2 is the client (ntp server 10.10.10.1 key 1) and syncs to stratum 4. Base for the NTP configuration article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.10.10.1/24" }, "extra": "ntp master 3 (stratum 3, reference .LOCL.); NTP MD5 key 1; authoritative time source" },
+    { "name": "R2", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.10.10.2/24" }, "extra": "ntp server 10.10.10.1 key 1; client, synchronises to stratum 4" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "R2", "b_port": "Gi0/0", "subnet": "10.10.10.0/24", "role": "ntp" }
+  ]
+}

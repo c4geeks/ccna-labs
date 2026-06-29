@@ -1,0 +1,28 @@
+! ===========================================================================
+! R2 ntp lab  (NTP client, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: ntp
+! https://computingforgeeks.com/cisco-ntp-configuration/
+!
+! R2 synchronises to R1 (10.10.10.1) in client/server mode, demanding the
+! shared MD5 key. It should land at stratum 4 (one below R1's stratum 3).
+! Verify: show ntp status / show ntp associations [detail] / show clock detail
+! ===========================================================================
+enable
+configure terminal
+hostname R2
+clock timezone UTC 0 0
+!
+interface GigabitEthernet0/0
+ ip address 10.10.10.2 255.255.255.0
+ no shutdown
+ exit
+!
+! Same MD5 key 1 as the server
+ntp authentication-key 1 md5 Cisc0NtpKey
+ntp authenticate
+ntp trusted-key 1
+!
+! Sync to R1, requiring authentication with key 1
+ntp server 10.10.10.1 key 1
+end
+write memory
