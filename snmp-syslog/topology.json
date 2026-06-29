@@ -1,0 +1,11 @@
+{
+  "name": "snmp-syslog",
+  "description": "One monitored Cisco router (R1) sending Syslog and SNMP traps to a monitoring host (NMS) at 10.20.20.50. R1 runs Syslog at trap level informational and SNMP in both v2c (read-only community CFG-RO) and v3 (authPriv user cfgmon, SHA + AES). Base for the SNMP and Syslog article.",
+  "nodes": [
+    { "name": "R1", "type": "router", "template": "c7200", "interfaces": { "Gi0/0": "10.20.20.1/24" }, "extra": "logging host 10.20.20.50 trap informational; snmp-server community CFG-RO ro + v3 user cfgmon (SHA/AES); trap hosts v2c + v3" },
+    { "name": "NMS", "type": "host", "template": "c7200", "interfaces": { "Gi0/0": "10.20.20.50/24" }, "extra": "Syslog + SNMP collector stand-in (real deployment uses rsyslog/Graylog + LibreNMS/Zabbix)" }
+  ],
+  "links": [
+    { "a": "R1", "a_port": "Gi0/0", "b": "NMS", "b_port": "Gi0/0", "subnet": "10.20.20.0/24", "role": "management" }
+  ]
+}

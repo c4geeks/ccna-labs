@@ -1,0 +1,18 @@
+! ===========================================================================
+! NMS snmp-syslog lab  (management host stand-in, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: snmp-syslog
+! https://computingforgeeks.com/cisco-snmp-syslog-configuration/
+!
+! Stands in for the Syslog + SNMP collector at 10.20.20.50. In production this
+! is a real server (rsyslog/Graylog + LibreNMS/Zabbix), not a router; here it
+! just gives R1 a reachable destination for its log and trap traffic.
+! ===========================================================================
+enable
+configure terminal
+hostname NMS
+interface GigabitEthernet0/0
+ ip address 10.20.20.50 255.255.255.0
+ no shutdown
+ exit
+end
+write memory

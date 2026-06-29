@@ -1,0 +1,40 @@
+! ===========================================================================
+! R1 snmp-syslog lab  (monitored device, c7200 / IOS 15.2)
+! ComputingForGeeks CCNA 200-301 lab: snmp-syslog
+! https://computingforgeeks.com/cisco-snmp-syslog-configuration/
+!
+! R1 streams Syslog (logging host) and SNMP traps (snmp-server host) to the
+! monitoring host at 10.20.20.50. Syslog trap level informational; SNMP in both
+! v2c (community CFG-RO, read-only) and v3 (user cfgmon, SHA + AES, authPriv).
+! Run NMS-config.txt on the second device (management host stand-in).
+! ===========================================================================
+enable
+configure terminal
+hostname R1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+!
+interface GigabitEthernet0/0
+ ip address 10.20.20.1 255.255.255.0
+ no shutdown
+ exit
+!
+! Syslog: local buffer + remote server + severity threshold (level 6)
+logging buffered 32768 informational
+logging host 10.20.20.50
+logging trap informational
+logging source-interface GigabitEthernet0/0
+!
+! SNMP v2c: read-only community + trap host
+snmp-server location DC1-Rack4
+snmp-server contact noc@example.com
+snmp-server community CFG-RO ro
+snmp-server host 10.20.20.50 version 2c CFG-RO
+!
+! SNMP v3: authPriv user (SHA + AES) + trap host
+snmp-server group CFGADMIN v3 priv
+snmp-server user cfgmon CFGADMIN v3 auth sha Auth-Pass-2026 priv aes 128 Priv-Pass-2026
+snmp-server host 10.20.20.50 version 3 priv cfgmon
+snmp-server enable traps snmp linkdown linkup
+end
+write memory
